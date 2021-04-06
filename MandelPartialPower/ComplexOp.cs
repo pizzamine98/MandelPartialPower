@@ -180,13 +180,8 @@ namespace MandelPartialPower
              * 0 - k = 0 root
              * 1 - random root
              */
-            if (num0in.polar[0] == 0)
-            {
-                result0.polar[0] = 0;
-                result0.polar[1] = 0;
-            }
-            else
-            {
+            
+            
                 if (numeratorin == 0)
                 {
                     result0.polar[0] = 1;
@@ -262,7 +257,7 @@ namespace MandelPartialPower
                     if(numeratorin >= 0)
                     result0.polar[0] = (Decimal)Math.Pow((double)num0in.polar[0], (double)numeratorin / (double)denominatorin);
                 }
-            }
+            
                 return result0;
         }
         public void FindCartesian(Complex num1in)
@@ -281,10 +276,10 @@ namespace MandelPartialPower
                     
                 } else if(num0in.parts[1] < 0)
                 {
-                    num0in.polar[1] = -pi;
+                    num0in.polar[1] = -pi/2;
                 } else
                 {
-                    num0in.polar[1] = pi;
+                    num0in.polar[1] = pi/2;
                 }
             } else if(num0in.parts[0] > 0)
             {
