@@ -9,7 +9,7 @@ namespace MandelPartialPower
     {
         static void Main(string[] args)
         {
-            int which = 2;
+            int which = 4;
             if (which == 0)
             {
                 Stopwatch watch = new Stopwatch();
@@ -85,7 +85,9 @@ namespace MandelPartialPower
             } else if(which == 2)
             {
                 PolyMaker make = new PolyMaker();
-                make.root = @"C:\Users\Pizzamine98\Desktop\partialmendel";
+                Console.WriteLine("Enter directory to load files from.");
+                Console.WriteLine("Example: C:\\Users\\Pizzamine98\\Desktop\\partialmendel");
+                make.root = @"" + Console.ReadLine();
                 make.Setup();
                 make.Execute();
             } else if(which == 3)
@@ -96,6 +98,29 @@ namespace MandelPartialPower
                 powo.LoadFile();
                 
                 powo.MakePow();
+            } else if(which == 4)
+            {
+                PowerProgression powprog = new PowerProgression();
+                powprog.nround = 6;
+                powprog.nsteps = (95*4)+1;
+                if (true)
+                {
+                    powprog.nsteps = 360;
+                }
+                powprog.startpow = new Complex();
+                powprog.startpow.parts = new Decimal[2] { (Decimal)2,0};
+                powprog.endpow = new Complex();
+                powprog.endpow.parts = new Decimal[2] {11, 0};
+                powprog.baseid = 12;
+                powprog.h = 1080;
+                powprog.circle = true;
+                powprog.maxitts = 64;
+                powprog.centerpoint = new Complex();
+                powprog.centerpoint.parts = new Decimal[2] { 0, 0 };
+                powprog.upy = (Decimal)4;
+                powprog.root = @"C:\Users\Pizzamine98\Desktop\partialmendel";
+                powprog.SetupStuff();
+                powprog.SetupParameters();
             }
         }
     }

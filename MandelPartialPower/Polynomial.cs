@@ -9,14 +9,24 @@ namespace MandelPartialPower
         public PolyTerm[] terms;
         public int nterms;
         public int id;
+        public bool boomer;
         public string polystring;
         public string coeffstring;
         private ComplexOp cop;
+        private Complex tempopow;
         private int maxitts;
         private Decimal maxto;
         private Complex startval;
+        private Decimal maxmag;
+        public void SetTempoPow(Complex tempopowin)
+        {
+            tempopow = tempopowin;
+            cop.useweird = true;
+            cop.complexpow = tempopow;
+        }
         public void Setup(int whichmethodin,int maxittsin, Decimal maxtoin,Complex startvalin)
         {
+            boomer = false;
             cop = new ComplexOp();
             cop.whichmethod = whichmethodin;
             cop.StartUp();
@@ -25,9 +35,14 @@ namespace MandelPartialPower
             maxto = maxtoin;
             startval = startvalin;
             cop.FindPolar(startval);
+            inputin = new Complex();
+            inputin.parts = new Decimal[2];
+            maxmag = 0;
         }
+        
         public void Setup2(string rootin)
         {
+           
             cop.root = rootin;
         }
         public void MakeAllPolar()
@@ -106,12 +121,18 @@ namespace MandelPartialPower
             }
         }
         private Complex output,term,inputin;
-        
+        private Decimal cool;
         public int FindResult( Complex cvalin)
         {
-            inputin = new Complex();
-            inputin.parts = new Decimal[2] { startval.parts[0], startval.parts[1] };
-            cop.FindPolar(cvalin);
+            if (boomer)
+            {
+                inputin = new Complex();
+                inputin.parts = new Decimal[2] { startval.parts[0], startval.parts[1] };
+            } else
+            {
+                inputin.parts = new decimal[2] { startval.parts[0], startval.parts[1] };
+            }
+                cop.FindPolar(cvalin);
             cop.FindPolar(inputin);
             int curitt = 0;
             output = new Complex();
@@ -120,6 +141,7 @@ namespace MandelPartialPower
 
             while(curitt < maxitts && output.polar[0] < maxto)
             {
+                
                 curitt++;
                 output.polar = new Decimal[2] { 0, 0 };
                 output.parts = new Decimal[2] { 0, 0 };
@@ -150,11 +172,18 @@ namespace MandelPartialPower
                     Console.WriteLine("TERM " + ih);
 
                     cop.FindCartesian(term);
-                    if(false)
+                   
+                    if (false)
                     cop.PrintNumber(term);
                     output=cop.Add(output, term);
                 }
                 cop.FindPolar(output);
+                cool = output.polar[0] * output.polar[0];
+                if (cool > maxmag)
+                {
+                    maxmag = cool;
+                    Console.WriteLine("MAX MAG: " + maxmag + " " + maxmag/Decimal.MaxValue);
+                }
                 inputin.parts = new Decimal[2] { output.parts[0],output.parts[1]};
                 cop.FindPolar(inputin);
                 if (false)

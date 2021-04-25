@@ -8,11 +8,13 @@ namespace MandelPartialPower
     {
         public Complex coefficient;
         public int[] zpow, cpow;
+        
         public string GetFromTerm()
         {
             return coefficient.parts[0] + "," + coefficient.parts[1] + "," + zpow[0] + "," + zpow[1] + "," + cpow[0] + "," + cpow[1];
 
         }
+       
         public void GetFromString(string termstrin)
         {
             string[] party = termstrin.Split(",");

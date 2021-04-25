@@ -28,6 +28,7 @@ namespace MandelPartialPower
         public Color colon;
         public int rold;
         public Stopwatch watch2,watch3;
+        
         public void GoThrough()
         {
             cbyte = 0;

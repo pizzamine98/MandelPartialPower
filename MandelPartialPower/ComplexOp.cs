@@ -16,6 +16,8 @@ namespace MandelPartialPower
             result0.parts = new Decimal[2] { (num0in.parts[0] * num1in.parts[0]) - (num0in.parts[1] * num1in.parts[1]), (num0in.parts[0] * num1in.parts[1]) + (num0in.parts[1] * num1in.parts[0]) };
             return result0;
         }
+        public bool useweird;
+        public Complex complexpow;
         public Decimal FindMagnitude(Complex num0in)
         {
             Decimal mag = 0;
@@ -23,6 +25,13 @@ namespace MandelPartialPower
             mag += num0in.parts[1] * num0in.parts[1];
             mag = (Decimal)(Math.Sqrt((double)mag));
             return mag;
+        }
+        public void RoundIt(Complex num0in,int nround)
+        {
+            num0in.parts[0] = Math.Round(num0in.parts[0],nround);
+            num0in.parts[1] = Math.Round(num0in.parts[1], nround);
+            num0in.polar[0] = Math.Round(num0in.polar[0], nround);
+            num0in.polar[1] = Math.Round(num0in.polar[1], nround);
         }
         public string MakeComplexString(Complex num0in, bool iscoeffin,int nroundin)
         {
@@ -136,12 +145,14 @@ namespace MandelPartialPower
             powol.root = @"C:\Users\Pizzamine98\Desktop\partialmendel";
             powol.StartUp();
             powol.LoadFile();
+            useweird = false;
         }
         public void StartUp2()
         {
             powol = new ComplexPower();
             powol.root = root;
             powol.StartUp();
+            useweird = false;
         }
         
         public ComplexPower powol;
@@ -152,8 +163,17 @@ namespace MandelPartialPower
         public Complex Add(Complex num0in, Complex num1in)
         {
             Complex result0 = new Complex();
-            result0.parts = new Decimal[2] { num0in.parts[0] + num1in.parts[0], num0in.parts[1] + num1in.parts[1] };
-            return result0;
+            result0.parts = new Decimal[2];
+            if (Math.Abs((double)num0in.parts[0] + (double)num1in.parts[0]) > (double)Decimal.MaxValue || Math.Abs((double)num0in.parts[1] + (double)num1in.parts[1]) > (double)Decimal.MaxValue)
+            {
+                result0.parts[0] = 10;
+                result0.parts[1] = 10;
+            }
+            else
+            {
+                result0.parts = new Decimal[2] { num0in.parts[0] + num1in.parts[0], num0in.parts[1] + num1in.parts[1] };
+            }
+                return result0;
         }
         public double minmag;
         public Complex result1;
@@ -191,10 +211,17 @@ namespace MandelPartialPower
                 {
                     if(numeratorin < 0)
                     {
-                        Complex holy = powol.UsePow(numeratorin,num0in);
+                    if (!useweird)
+                    {
+                        Complex holy = powol.UsePow(numeratorin, num0in);
                         result0.polar[0] = holy.polar[0];
                         result0.polar[1] = holy.polar[1];
-
+                    } else
+                    {
+                        Complex holy = powol.UsePow(complexpow, num0in);
+                        result0.polar[0] = holy.polar[0];
+                        result0.polar[1] = holy.polar[1];
+                    }
                     } else {
                         if (denominatorin == 1)
                         {
@@ -283,12 +310,29 @@ namespace MandelPartialPower
                 }
             } else if(num0in.parts[0] > 0)
             {
-                num0in.polar[1] = (Decimal)Math.Atan2((double)num0in.parts[1], (double)num0in.parts[0]);
-            } else if(num0in.parts[0] < 0)
-            {
-                num0in.polar[1] = (Decimal)Math.Atan2((double)num0in.parts[1], (double)num0in.parts[0]);
                 
+                if (num0in.parts[1] == 0)
+                {
+                    
+                    num0in.polar[1] = 0;
+                }
+                else
+                {
+                   
+                    num0in.polar[1] = (Decimal)Math.Atan2((double)num0in.parts[1], (double)num0in.parts[0]);
+                }
+                } else if(num0in.parts[0] < 0)
+                    {
+                if (num0in.parts[1] == 0)
+                {
+                    num0in.polar[1] = pi;
+                }
+                else
+                {
+                    num0in.polar[1] = (Decimal)Math.Atan2((double)num0in.parts[1], (double)num0in.parts[0]);
+                }
             }
+           
         }
         public void PrintNumber(Complex num0in)
         {

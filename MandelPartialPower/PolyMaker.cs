@@ -39,7 +39,8 @@ namespace MandelPartialPower
             bored = false;
             while (!bored)
             {
-                Console.WriteLine("Enter \"newpoly\" to make new polynomial,\"run\" to run stuff,\"printpolys\" to print polynomials or \"exit\" to exit");
+                Console.WriteLine("Enter \"newpoly\" to make new polynomial,\"run\" to run stuff,\"printpolys\" to print polynomials,\"fib\" to do complex fibonacci" +
+                    " sequence or \"exit\" to exit");
                 command = Console.ReadLine();
                 if (command.Equals("exit"))
                 {
@@ -161,9 +162,18 @@ namespace MandelPartialPower
                         polys[iq].MakePolyString();
                         Console.WriteLine(polys[iq].id + " " + polys[iq].polystring);
                     }
+                } else if (command.Equals("fib"))
+                {
+                    graphe = new FibGrapher();
+                    graphe.nmax = (Decimal)5.0;
+                    graphe.height = 1080;
+                    graphe.root = root;
+                    graphe.StartImage();
+                    graphe.MakeImages0();
                 }
             }
         }
+        public FibGrapher graphe;
         public RunHandler handler;
         public RunData data;
         public int polyid, nzoom, width;
